@@ -2,310 +2,34 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mobil Test Sayfası</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Sayfası</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 15px;
-            color: white;
+            height: 100vh;
+            font-family: sans-serif;
+            background-color: #f0f2f5;
         }
-        
-        .mobile-container {
-            width: 100%;
-            max-width: 400px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 25px;
-            overflow: hidden;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-            color: #333;
-        }
-        
-        .header {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            padding: 25px 20px;
+        .container {
             text-align: center;
-        }
-        
-        .header h1 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-        
-        .header p {
-            font-size: 0.95rem;
-            opacity: 0.9;
-        }
-        
-        .content {
-            padding: 25px;
-        }
-        
-        .counter-display {
-            font-size: 3.5rem;
-            font-weight: 800;
-            text-align: center;
-            margin: 20px 0;
-            color: #667eea;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        .input-group {
-            margin-bottom: 20px;
-        }
-        
-        .input-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #555;
-        }
-        
-        .input-group input {
-            width: 100%;
-            padding: 14px;
-            border: 2px solid #e1e5e9;
+            padding: 20px;
+            background: white;
             border-radius: 12px;
-            font-size: 1.1rem;
-            outline: none;
-            transition: border-color 0.3s;
+            shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-        
-        .input-group input:focus {
-            border-color: #667eea;
-        }
-        
-        .button-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin: 25px 0;
-        }
-        
-        .btn {
-            padding: 16px;
-            border: none;
-            border-radius: 15px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: center;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-        }
-        
-        .btn-secondary {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-            color: white;
-        }
-        
-        .btn-success {
-            background: linear-gradient(45deg, #4ecdc4, #44a08d);
-            color: white;
-        }
-        
-        .btn-warning {
-            background: linear-gradient(45deg, #ffd166, #ef9b0f);
+        h1 {
             color: #333;
-        }
-        
-        .btn:active {
-            transform: scale(0.95);
-        }
-        
-        .output {
-            background: #f8f9fa;
-            padding: 18px;
-            border-radius: 15px;
-            min-height: 60px;
-            font-size: 1rem;
-            line-height: 1.5;
-            margin-top: 15px;
-        }
-        
-        .color-preview {
-            width: 80px;
-            height: 80px;
-            margin: 15px auto;
-            border-radius: 15px;
-            border: 3px solid white;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
-        
-        /* Mobil için özel stiller */
-        @media (max-width: 320px) {
-            .header h1 {
-                font-size: 1.5rem;
-            }
-            
-            .counter-display {
-                font-size: 2.8rem;
-            }
-            
-            .btn {
-                padding: 14px;
-                font-size: 1rem;
-            }
-        }
-        
-        /* Dokunmatik geri bildirim */
-        .touch-feedback {
-            animation: touchPulse 0.3s ease-in-out;
-        }
-        
-        @keyframes touchPulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
         }
     </style>
 </head>
 <body>
-    <div class="mobile-container">
-        <div class="header">
-            <h1>Mobil Test Uygulaması</h1>
-            <p>HTML, CSS ve JavaScript ile oluşturuldu</p>
-        </div>
-        
-        <div class="content">
-            <div class="input-group">
-                <label for="userName">Adınız:</label>
-                <input type="text" id="userName" placeholder="Adınızı girin..." autocomplete="off">
-            </div>
-            
-            <div class="counter-display" id="counter">0</div>
-            
-            <div class="button-grid">
-                <button class="btn btn-primary" onclick="handleAction('greet')">Selamla</button>
-                <button class="btn btn-secondary" onclick="handleAction('increment')">Arttır</button>
-                <button class="btn btn-success" onclick="handleAction('randomColor')">Renk Değiştir</button>
-                <button class="btn btn-warning" onclick="handleAction('showTime')">Saat Göster</button>
-            </div>
-            
-            <div class="color-preview" id="colorPreview"></div>
-            
-            <div class="output" id="output">
-                Hoş geldiniz! Butonlara dokunarak test edebilirsiniz.
-            </div>
-        </div>
+    <div class="container">
+        <h1>Merhaba!</h1>
+        <p>Cloudflare Pages Test Sitesi Çalışıyor.</p>
     </div>
-
-    <script>
-        let counter = 0;
-        const output = document.getElementById('output');
-        const counterDisplay = document.getElementById('counter');
-        const colorPreview = document.getElementById('colorPreview');
-        const userNameInput = document.getElementById('userName');
-        
-        // Buton tıklama efekti
-        function addTouchFeedback(element) {
-            element.classList.add('touch-feedback');
-            setTimeout(() => element.classList.remove('touch-feedback'), 300);
-        }
-        
-        // Tüm butonlara dokunma efekti ekle
-        document.querySelectorAll('.btn').forEach(btn => {
-            btn.addEventListener('touchstart', () => addTouchFeedback(btn));
-            btn.addEventListener('mousedown', () => addTouchFeedback(btn));
-        });
-        
-        // Ana işlem fonksiyonu
-        function handleAction(action) {
-            switch(action) {
-                case 'greet':
-                    greetUser();
-                    break;
-                case 'increment':
-                    incrementCounter();
-                    break;
-                case 'randomColor':
-                    changeRandomColor();
-                    break;
-                case 'showTime':
-                    showCurrentTime();
-                    break;
-            }
-        }
-        
-        function greetUser() {
-            const name = userNameInput.value.trim();
-            if (name) {
-                output.innerHTML = `Merhaba <strong>${name}</strong>! 🎉<br>Harika bir gün geçiriyorsunuz!`;
-            } else {
-                output.innerHTML = '<span style="color: #e74c3c;">Lütfen adınızı girin!</span>';
-                userNameInput.focus();
-            }
-        }
-        
-        function incrementCounter() {
-            counter++;
-            counterDisplay.textContent = counter;
-            
-            if (counter % 5 === 0) {
-                output.innerHTML = `🎉 ${counter} kez arttırdınız! Harikasınız!`;
-            } else {
-                output.innerHTML = `Sayı: ${counter}`;
-            }
-        }
-        
-        function changeRandomColor() {
-            const colors = [
-                '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', 
-                '#FFEAA7', '#DDA0DD', '#98D8C8', '#FF9AA2',
-                '#FFB7B2', '#FFDAC1', '#E2F0CB', '#B5EAD7'
-            ];
-            const randomColor = colors[Math.floor(Math.random() * colors.length)];
-            colorPreview.style.backgroundColor = randomColor;
-            output.innerHTML = `Yeni renk: <span style="color: ${randomColor}; font-weight: bold;">${randomColor}</span>`;
-        }
-        
-        function showCurrentTime() {
-            const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
-            const timeString = `${hours}:${minutes}:${seconds}`;
-            output.innerHTML = `⏰ Şu anki saat: <strong>${timeString}</strong>`;
-        }
-        
-        // Klavye desteği (Enter ile selamlama)
-        userNameInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                greetUser();
-            }
-        });
-        
-        // Mobil cihazlarda klavye davranışını optimize et
-        userNameInput.addEventListener('focus', () => {
-            setTimeout(() => {
-                window.scrollTo(0, 0);
-            }, 300);
-        });
-        
-        // Sayfa yüklendiğinde input'a odaklan
-        window.addEventListener('load', () => {
-            if (window.innerWidth > 480) {
-                userNameInput.focus();
-            }
-        });
-    </script>
 </body>
 </html>
-
-
