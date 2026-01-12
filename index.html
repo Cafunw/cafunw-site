@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gradient Geçişli Tam Ekran</title>
+    <title>malaphe - Gradient Geçişli</title>
     <style>
         * {
             margin: 0;
@@ -15,52 +15,41 @@
             height: 100%;
             width: 100%;
             overflow: hidden;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        .gradient-container {
-            min-height: 100vh;
-            width: 100%;
-            background: linear-gradient(-45deg, 
-                #ee7752, #e73c7e, #23a6d5, #23d5ab);
-            background-size: 400% 400%;
-            animation: gradient 15s ease infinite;
+            background: #000;
             display: flex;
             justify-content: center;
             align-items: center;
-            color: white;
+            font-family: 'Arial Black', 'Arial Bold', sans-serif;
+        }
+        
+        .gradient-text {
+            font-size: 15vw;
+            font-weight: 900;
             text-align: center;
-            padding: 20px;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            
+            /* Gradient efekti */
+            background: linear-gradient(45deg, 
+                #ff0000, #ff9900, #ffff00, #00ff00, 
+                #00ffff, #0000ff, #9900ff, #ff00ff);
+            background-size: 400% 400%;
+            
+            /* Metne gradient uygula */
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            
+            /* Animasyon */
+            animation: gradient-flow 8s ease infinite, 
+                       pulse 3s ease-in-out infinite alternate;
+            
+            /* Gölge efekti */
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
         }
         
-        .content {
-            max-width: 800px;
-            padding: 30px;
-            background-color: rgba(0, 0, 0, 0.3);
-            border-radius: 15px;
-            backdrop-filter: blur(5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
-        
-        h1 {
-            font-size: 2.8rem;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-        
-        p {
-            font-size: 1.2rem;
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
-        
-        .gradient-info {
-            margin-top: 25px;
-            font-size: 1rem;
-            opacity: 0.9;
-        }
-        
-        @keyframes gradient {
+        /* Gradient animasyonu */
+        @keyframes gradient-flow {
             0% {
                 background-position: 0% 50%;
             }
@@ -72,86 +61,103 @@
             }
         }
         
-        /* Mobil uyumluluk */
+        /* Nabız atışı efekti */
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.05);
+                opacity: 0.9;
+            }
+        }
+        
+        /* Mobil için boyut ayarı */
         @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
+            .gradient-text {
+                font-size: 20vw;
+                letter-spacing: 3px;
             }
-            
-            p {
-                font-size: 1rem;
-            }
-            
-            .content {
-                padding: 20px;
-                margin: 15px;
+        }
+        
+        /* Çok küçük ekranlar için */
+        @media (max-width: 480px) {
+            .gradient-text {
+                font-size: 25vw;
+                letter-spacing: 2px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="gradient-container">
-        <div class="content">
-            <h1>Tam Ekran Gradient Geçiş</h1>
-            <p>Bu sayfa, ekranı tamamen kaplayan ve yumuşak renk geçişlerine sahip bir gradient arka plana sahiptir. Arkaplan renkleri sürekli olarak birbirine dönüşmektedir.</p>
-            <p>Gradient, turuncu (#ee7752), pembe (#e73c7e), mavi (#23a6d5) ve yeşil (#23d5ab) renkleri arasında 15 saniyelik bir döngüde hareket ediyor.</p>
-            <div class="gradient-info">
-                <p>Gradient CSS <code>linear-gradient</code> ve <code>animation</code> özellikleri kullanılarak oluşturulmuştur.</p>
-                <p>Sayfayı yenileyerek veya ekran boyutunu değiştirerek gradientin nasıl uyum sağladığını görebilirsiniz.</p>
-            </div>
-        </div>
-    </div>
+    <div class="gradient-text">malaphe</div>
     
     <script>
-        // Gradient hızını kontrol etmek için küçük bir etkileşim ekleyelim
-        document.addEventListener('DOMContentLoaded', function() {
-            const container = document.querySelector('.gradient-container');
+        // Gradient renklerini rastgele değiştirmek için
+        const gradientText = document.querySelector('.gradient-text');
+        const colorSets = [
+            // Kırmızı-turuncu-sarı
+            ["#ff0000", "#ff9900", "#ffff00"],
+            // Mavi-mor-pembe
+            ["#0000ff", "#9900ff", "#ff00ff"],
+            // Yeşil-turkuaz-mavi
+            ["#00ff00", "#00ffff", "#0000ff"],
+            // Pembe-kırmızı-turuncu
+            ["#ff00ff", "#ff0000", "#ff9900"],
+            // Mor-mavi-yeşil
+            ["#9900ff", "#0000ff", "#00ff00"],
+            // Turkuaz-yeşil-sarı
+            ["#00ffff", "#00ff00", "#ffff00"]
+        ];
+        
+        let currentSet = 0;
+        
+        // Her 10 saniyede bir renk setini değiştir
+        setInterval(() => {
+            currentSet = (currentSet + 1) % colorSets.length;
+            const colors = colorSets[currentSet];
             
-            // Fare hareketine tepki verme (isteğe bağlı)
-            document.addEventListener('mousemove', function(e) {
-                const x = e.clientX / window.innerWidth;
-                const y = e.clientY / window.innerHeight;
-                
-                // Gradient pozisyonunu fare konumuna göre hafifçe değiştir
-                container.style.backgroundPosition = `${x * 100}% ${y * 100}%`;
-            });
+            // Gradient'i güncelle
+            gradientText.style.background = `linear-gradient(45deg, 
+                ${colors[0]}, ${colors[1]}, ${colors[2]})`;
+            gradientText.style.backgroundSize = '400% 400%';
             
-            // Gradient hızını değiştirmek için tıklama
-            container.addEventListener('click', function() {
-                const currentSpeed = 15; // saniye
-                const newSpeed = currentSpeed === 15 ? 30 : 15;
-                container.style.animationDuration = `${newSpeed}s`;
-                
-                // Kullanıcıya bilgi ver
-                const content = document.querySelector('.content');
-                const info = document.createElement('p');
-                info.textContent = `Gradient hızı ${newSpeed} saniye olarak ayarlandı.`;
-                info.style.marginTop = "10px";
-                info.style.fontSize = "0.9rem";
-                info.style.opacity = "0.8";
-                
-                // Eski bildirimi kaldır
-                const oldInfo = document.querySelector('.speed-info');
-                if (oldInfo) oldInfo.remove();
-                
-                info.classList.add('speed-info');
-                content.appendChild(info);
-                
-                // 3 saniye sonra bildirimi kaldır
-                setTimeout(() => {
-                    if (info.parentNode) {
-                        info.style.transition = "opacity 0.5s";
-                        info.style.opacity = "0";
-                        setTimeout(() => {
-                            if (info.parentNode) info.remove();
-                        }, 500);
-                    }
-                }, 3000);
-            });
+            // Animasyonu sıfırla
+            gradientText.style.animation = 'none';
+            setTimeout(() => {
+                gradientText.style.animation = 'gradient-flow 8s ease infinite, pulse 3s ease-in-out infinite alternate';
+            }, 10);
+        }, 10000);
+        
+        // Tıklanınca da renk değiştir
+        gradientText.addEventListener('click', () => {
+            currentSet = (currentSet + 1) % colorSets.length;
+            const colors = colorSets[currentSet];
+            
+            gradientText.style.background = `linear-gradient(45deg, 
+                ${colors[0]}, ${colors[1]}, ${colors[2]})`;
+            gradientText.style.backgroundSize = '400% 400%';
+            
+            // Animasyonu sıfırla
+            gradientText.style.animation = 'none';
+            setTimeout(() => {
+                gradientText.style.animation = 'gradient-flow 8s ease infinite, pulse 3s ease-in-out infinite alternate';
+            }, 10);
+        });
+        
+        // Fare hareketiyle gradient yönünü değiştir
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            // Açıyı fare pozisyonuna göre ayarla (0-360 derece)
+            const angle = x * 360;
+            gradientText.style.background = `linear-gradient(${angle}deg, 
+                #ff0000, #ff9900, #ffff00, #00ff00, 
+                #00ffff, #0000ff, #9900ff, #ff00ff)`;
+            gradientText.style.backgroundSize = '400% 400%';
         });
     </script>
-</body>
-</html>
-    <script src="script.js"></script>
 </body>
 </html>
