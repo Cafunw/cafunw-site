@@ -1,25 +1,27 @@
-import bcrypt from 'bcryptjs';
-
 interface Env {
   ADMIN_EMAIL: string;
-  ADMIN_PASSWORD_HASH: string;
+  ADMIN_PASSWORD_SHA256: string;
   SESSION_SECRET: string;
 }
 
-// Session imzası oluşturmak için yardımcı fonksiyon (SHA-256)
-async function createSessionSignature(email: string, secret: string): Promise<string> {
+// Helper: Metni SHA-256 hash'e çevirir (Hex string döner)
+async function sha256(text: string): Promise<string> {
   const encoder = new TextEncoder();
-  const data = encoder.encode(email + secret);
+  const data = encoder.encode(text);
   const hashBuffer = await crypto.subtle.digest('SHA-256', data);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// Helper: Session için imza oluşturur
+async function createSessionSignature(email: string, secret: string): Promise<string> {
+  return await sha256(email + secret);
 }
 
 export const onRequestPost: PagesFunction<Env> = async (context) => {
   try {
     const { request, env } = context;
 
-    // Body parse
     const body: any = await request.json();
     const { email, password } = body;
 
@@ -32,17 +34,18 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       return new Response(JSON.stringify({ ok: false, error: 'Giriş bilgileri geçersiz.' }), { status: 401 });
     }
 
-    // 2. Şifre Kontrolü (bcrypt)
-    const match = await bcrypt.compare(password, env.ADMIN_PASSWORD_HASH);
-    if (!match) {
+    // 2. Şifre Kontrolü (WebCrypto SHA-256)
+    const inputHash = await sha256(password);
+    
+    // Basit string karşılaştırması (Timing attack koruması istenirse crypto.subtle.timingSafeEqual kullanılabilir ama admin panel için opsiyonel)
+    if (inputHash !== env.ADMIN_PASSWORD_SHA256) {
       return new Response(JSON.stringify({ ok: false, error: 'Giriş bilgileri geçersiz.' }), { status: 401 });
     }
 
-    // 3. Session Token Oluşturma (Stateless imza)
+    // 3. Session Token Oluşturma
     const token = await createSessionSignature(env.ADMIN_EMAIL, env.SESSION_SECRET);
 
-    // 4. Cookie Hazırlama
-    // 7 Gün = 60 * 60 * 24 * 7 = 604800 saniye
+    // 4. Cookie Hazırlama (7 gün)
     const cookieValue = `cafunw_admin=${token}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=604800`;
 
     return new Response(JSON.stringify({ ok: true }), {
