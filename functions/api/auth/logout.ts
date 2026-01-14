@@ -1,5 +1,5 @@
 export const onRequestPost: PagesFunction = async () => {
-  // Cookie silmek için Max-Age=0 olarak ayarlanır
+  // Cookie silme (Max-Age=0)
   const cookieValue = `cafunw_admin=; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=0`;
 
   return new Response(JSON.stringify({ ok: true }), {
