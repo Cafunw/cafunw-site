@@ -49,6 +49,11 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     const got = inputHashRaw.trim().toLowerCase();
     const expected = String(env.ADMIN_PASSWORD_SHA256 || "").trim().toLowerCase();
 
+    console.log("LOGIN_DEBUG got:", got);
+    console.log("LOGIN_DEBUG expected:", expected);
+    console.log("LOGIN_DEBUG email:", inputEmail, "admin:", adminEmail);
+
+
     if (got !== expected) {
       return new Response(JSON.stringify({ ok: false, error: 'Giriş bilgileri geçersiz.' }), { status: 401 });
     }
