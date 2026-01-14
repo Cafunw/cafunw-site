@@ -40,7 +40,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     }
 
     // 2. Şifre Normalizasyonu ve Kontrolü
-    const inputPw = String(body.password || ""); // Şifrede trim yapılmaz, kullanıcı boşluklu şifre seçmiş olabilir
+    const inputPw = String(body.password || "").trim(); // Şifrede trim yapılmaz, kullanıcı boşluklu şifre seçmiş olabilir
     
     // Hash üret
     const inputHashRaw = await sha256(inputPw);
