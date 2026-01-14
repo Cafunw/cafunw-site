@@ -1,1 +1,200 @@
-OK
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cafunw Admin Panel</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-color: #e0e0e0;
+            --accent-color: #3b82f6;
+            --error-color: #ef4444;
+            --input-bg: #2d2d2d;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h1 { margin-bottom: 1.5rem; font-size: 1.5rem; }
+
+        .hidden { display: none; }
+
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            background-color: var(--input-bg);
+            border: 1px solid #333;
+            border-radius: 4px;
+            color: white;
+            box-sizing: border-box;
+        }
+
+        input:focus { outline: 2px solid var(--accent-color); border-color: transparent; }
+
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: opacity 0.2s;
+        }
+
+        button:hover { opacity: 0.9; }
+
+        .error-msg {
+            color: var(--error-color);
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .dashboard-link {
+            display: block;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background-color: #2d2d2d;
+            text-decoration: none;
+            color: var(--accent-color);
+            border-radius: 4px;
+            border: 1px solid #333;
+        }
+        
+        .dashboard-link:hover { background-color: #333; }
+        
+        .logout-btn { background-color: #444; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div id="loading">Yükleniyor...</div>
+
+        <div id="login-section" class="hidden">
+            <h1>Yönetici Girişi</h1>
+            <div id="login-error" class="error-msg"></div>
+            <form id="login-form">
+                <input type="email" id="email" placeholder="E-posta" required>
+                <input type="password" id="password" placeholder="Şifre" required>
+                <button type="submit">Giriş Yap</button>
+            </form>
+        </div>
+
+        <div id="dashboard-section" class="hidden">
+            <h1>Hoşgeldin, Admin</h1>
+            <p>Sistem aktif.</p>
+            
+            <a href="https://mail.zoho.com" target="_blank" rel="noopener" class="dashboard-link">
+                📧 Zoho Mail'e Git
+            </a>
+
+            <button id="logout-btn" class="logout-btn">Çıkış Yap</button>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '/api/auth';
+        const ui = {
+            loading: document.getElementById('loading'),
+            login: document.getElementById('login-section'),
+            dashboard: document.getElementById('dashboard-section'),
+            loginForm: document.getElementById('login-form'),
+            error: document.getElementById('login-error'),
+            logoutBtn: document.getElementById('logout-btn')
+        };
+
+        // UI Helper
+        function showSection(section) {
+            ui.loading.classList.add('hidden');
+            ui.login.classList.add('hidden');
+            ui.dashboard.classList.add('hidden');
+            section.classList.remove('hidden');
+        }
+
+        // Check Auth Status
+        async function checkAuth() {
+            try {
+                const res = await fetch(`${API_BASE}/me`);
+                const data = await res.json();
+                
+                if (res.ok && data.ok) {
+                    showSection(ui.dashboard);
+                } else {
+                    showSection(ui.login);
+                }
+            } catch (e) {
+                showSection(ui.login);
+            }
+        }
+
+        // Login Handler
+        ui.loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            ui.error.style.display = 'none';
+            const btn = e.target.querySelector('button');
+            const originalText = btn.innerText;
+            btn.innerText = 'Kontrol ediliyor...';
+            btn.disabled = true;
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const res = await fetch(`${API_BASE}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await res.json();
+
+                if (res.ok && data.ok) {
+                    window.location.reload();
+                } else {
+                    ui.error.innerText = data.error || 'Giriş başarısız.';
+                    ui.error.style.display = 'block';
+                }
+            } catch (err) {
+                ui.error.innerText = 'Sunucu hatası.';
+                ui.error.style.display = 'block';
+            } finally {
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        });
+
+        // Logout Handler
+        ui.logoutBtn.addEventListener('click', async () => {
+            await fetch(`${API_BASE}/logout`, { method: 'POST' });
+            window.location.reload();
+        });
+
+        // Init
+        window.onload = checkAuth;
+    </script>
+</body>
+</html>
