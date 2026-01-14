@@ -3,7 +3,7 @@ interface Env {
   SESSION_SECRET: string;
 }
 
-// Helper: Hash üretici (login ile aynı mantıkta olmalı)
+// Helper
 async function sha256(text: string): Promise<string> {
   const encoder = new TextEncoder();
   const data = encoder.encode(text);
@@ -36,13 +36,17 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
     });
   }
 
-  // Token doğrulama: (Email + Secret) hash'i cookie ile eşleşiyor mu?
-  const expectedToken = await sha256(env.ADMIN_EMAIL + env.SESSION_SECRET);
+  // Env Email'i normalize et (Login'deki mantıkla aynı olmalı)
+  const adminEmail = String(env.ADMIN_EMAIL || "").trim().toLowerCase();
+  
+  // Beklenen token'ı üret
+  const expectedToken = await sha256(adminEmail + env.SESSION_SECRET);
 
   if (sessionToken === expectedToken) {
     return new Response(JSON.stringify({ 
       ok: true, 
-      user: { email: env.ADMIN_EMAIL } 
+      // Kullanıcıya orijinal env değerini veya normalize halini dönebilirsin
+      user: { email: adminEmail } 
     }), {
       headers: { 'Content-Type': 'application/json' }
     });
